@@ -23,13 +23,12 @@ def combine_csv(filepaths: list):
 
         dataframes.append(dataframe)
 
-    combined_dataframes = pandas.concat(dataframes)
-    combined_dataframes.to_csv(sys.stdout, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL, lineterminator='\n')
+    combined_dataframe = pandas.concat(dataframes)
+    combined_dataframe.to_csv(sys.stdout, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL, lineterminator='\n')
 
 
 def main():
     """ Script to stack csv files with similar headers """
-
     parser = argparse.ArgumentParser()
     parser.add_argument('filepaths', metavar='N', type=str, nargs='+', help='a csv file to combine')
 
