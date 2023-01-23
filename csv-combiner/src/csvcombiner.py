@@ -12,8 +12,8 @@ PROJECT_DIR = path.dirname(FILE_DIR)
 
 def write_csv(dataframe: pandas.DataFrame, output):
     """ Writes dataframe to output """
-    dataframe.to_csv(output, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL,
-                     lineterminator='\n')
+    return dataframe.to_csv(output, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL,
+                            lineterminator='\n')
 
 
 def read_csv(filepath: str):

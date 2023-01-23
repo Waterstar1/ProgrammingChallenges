@@ -1,8 +1,10 @@
 from src.csvcombiner import combine_csv
+from src.csvcombiner import write_csv
 from unittest.mock import patch
 
 import unittest
 import pandas
+import csv
 
 test_data_dict1 = {
     "email_hash": ["a", "b", "c"],
@@ -14,6 +16,12 @@ test_data_dict2 = {
     "category": ["Purple", "Unicorns", "First"
                  ]
 }
+
+test_data_string1 = """ "email_hash","category"
+                         "a","Shirts"
+                         "b","Blouses"
+                         "c","\\"Gingham\\" Shorts"
+                     """
 
 expected_data_dict_two_files = {
     "email_hash": ["a", "b", "c", "d", "e", "f"],
@@ -31,8 +39,13 @@ expected_data_dict_multiple_files = {
 }
 
 
-
 class TestCvsCombiner(unittest.TestCase):
+
+    def test_write_csv(self):
+        dataframe1 = pandas.DataFrame(test_data_dict1)
+        output_string = write_csv(dataframe1, None)
+
+        self.assertEqual(''.join(test_data_string1.split()), ''.join(output_string.split()))
 
     @patch('src.csvcombiner.read_csv')
     def test_combine_csv_two_files(self, read_csv):
@@ -58,3 +71,9 @@ class TestCvsCombiner(unittest.TestCase):
         actual_dataframe = combine_csv(["l.csv", "r.csv", "m.csv"])
 
         self.assertEqual(expected_dataframe.to_string(index=False), actual_dataframe.to_string(index=False))
+
+    @patch('src.csvcombiner.read_csv')
+    def test_combine_csv_file_not_found(self, read_csv):
+        read_csv.side_effect = [FileNotFoundError()]
+
+        self.assertRaises(FileNotFoundError, combine_csv, "dummy.csv")
