@@ -4,7 +4,6 @@ from unittest.mock import patch
 
 import unittest
 import pandas
-import csv
 
 test_data_dict1 = {
     "email_hash": ["a", "b", "c"],
