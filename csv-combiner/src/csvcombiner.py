@@ -6,7 +6,8 @@ import os.path as path
 import sys
 import pandas
 
-DIR = path.abspath(path.dirname(__file__) + "/../")
+FILE_DIR = path.abspath(path.dirname(__file__))
+PROJECT_DIR = path.dirname(FILE_DIR)
 
 
 def write_csv(dataframe: pandas.DataFrame, output):
@@ -17,7 +18,7 @@ def write_csv(dataframe: pandas.DataFrame, output):
 
 def read_csv(filepath: str):
     """ Reads dataframe from filepath """
-    return pandas.read_csv(filepath, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL)
+    return pandas.read_csv(path.join(PROJECT_DIR, filepath), doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL)
 
 
 def combine_csv(filepaths: list):
