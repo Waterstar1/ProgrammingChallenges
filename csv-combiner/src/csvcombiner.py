@@ -10,18 +10,18 @@ FILE_DIR = path.abspath(path.dirname(__file__))
 PROJECT_DIR = path.dirname(FILE_DIR)
 
 
-def write_csv(dataframe: pandas.DataFrame, output):
+def write_csv(dataframe: pandas.DataFrame, output_buffer) -> str:
     """ Writes dataframe to output """
-    return dataframe.to_csv(output, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL,
+    return dataframe.to_csv(output_buffer, index=False, doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL,
                             lineterminator='\n')
 
 
-def read_csv(filepath: str):
+def read_csv(filepath: str) -> pandas.DataFrame:
     """ Reads dataframe from filepath """
     return pandas.read_csv(path.join(PROJECT_DIR, filepath), doublequote=False, escapechar='\\', quoting=csv.QUOTE_ALL)
 
 
-def combine_csv(filepaths: list):
+def combine_csv(filepaths: list) -> pandas.DataFrame:
     """ Combines csv file and returns resulting dataframe """
 
     dataframes = []
@@ -39,15 +39,19 @@ def combine_csv(filepaths: list):
     return combined_dataframe
 
 
+def run_csvcombiner_script(filepaths, output_buffer) -> None:
+    """ Runs script to stack csv files with similar headers """
+    combined_dataframe = combine_csv(filepaths)
+    write_csv(combined_dataframe, output_buffer)
+
+
 def main():
-    """ Script to stack csv files with similar headers """
+    """ Parses arguments from command line and begins script """
     parser = argparse.ArgumentParser()
     parser.add_argument('filepaths', metavar='N', type=str, nargs='+', help='a csv file to combine')
 
     args = parser.parse_args()
-
-    combined_dataframe = combine_csv(args.filepaths)
-    write_csv(combined_dataframe, sys.stdout)
+    run_csvcombiner_script(args.filepaths, sys.stdout)
 
 
 if __name__ == '__main__':
